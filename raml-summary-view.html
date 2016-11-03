@@ -37,6 +37,9 @@ summary.raml = raml;
 Custom property | Description | Default
 ----------------|-------------|----------
 `--raml-summary-view` | Mixin applied to the element | `{}`
+`--raml-summary-view-title` | Mixin applied to the API title element | `{}`
+`--raml-summary-view-property` | Mixin applied to each line of attributes applied in the basic documentation view | `{}`
+`--raml-summary-view-description-color` | Color of the description of the API. | `rgba(0, 0, 0, 0.54)`
 
 @group RAML Elements
 @element raml-summary-view
@@ -63,12 +66,12 @@ Custom property | Description | Default
 
     .api-description {
       @apply(--paper-font-body2);
-      color: rgba(0, 0, 0, 0.54);
-      @apply(--raml-summary-view-api-description);
+      color: var(--raml-summary-view-description-color, rgba(0, 0, 0, 0.54));
+      @apply(--raml-summary-view-property);
     }
     </style>
     <h1>[[raml.title]]</h1>
-    <p class="simple-desc">
+    <p class="simple-desc" hidden$="[[isEmpty(raml.baseUri)]]">
       <label>Base URL</label>
       <span>[[raml.baseUri]]</span>
     </p>
