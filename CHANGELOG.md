@@ -1,3 +1,13 @@
+<a name="0.0.4"></a>
+## [0.0.4](https://github.com/advanced-rest-client/raml-summary-view/compare/0.0.3...v0.0.4) (2016-11-12)
+
+
+### Update
+
+* Updated hero image ([89ba6c68ad32440bbd16c8f018f5e134dd356e02](https://github.com/advanced-rest-client/raml-summary-view/commit/89ba6c68ad32440bbd16c8f018f5e134dd356e02))
+
+
+
 <a name="0.0.3"></a>
 ## 0.0.3 (2016-11-03)
 
