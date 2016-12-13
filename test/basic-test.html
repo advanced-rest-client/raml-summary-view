@@ -18,23 +18,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../iron-test-helpers/test-helpers.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
-    <!-- Step 1: import the element to test -->
-    <link rel="import" href="../raml-documentation-basic.html">
+    <link rel="import" href="../raml-summary-view.html">
   </head>
   <body>
 
     <test-fixture id="basic">
       <template>
-        <raml-documentation-basic></raml-documentation-basic>
+        <raml-summary-view auto-hide></raml-summary-view>
       </template>
     </test-fixture>
 
     <script>
-    /* global suite, test, fixture, assert */
+    /* global suite, test, fixture, assert, forceXIfStamp */
     suite('basic', function() {
-      test('`raml-documentation-basic` should be initialized', function() {
-        var element = fixture('basic');
-        assert.equal(element.isAttached, true, 'element.isAttached equals true');
+      var element;
+      setup(function() {
+        element = fixture('basic');
+      });
+      test('Element is hidden by default', function() {
+        forceXIfStamp(element);
+        assert.ok(element.getAttribute('hidden'));
+        assert.equal(getComputedStyle(element).display, 'none');
+      });
+
+      test('Toggable is closed', function() {
+        forceXIfStamp(element);
+        assert.equal(element.opened, false);
+      });
+
+      test('Element is visible when data', function() {
+        element.raml = {
+          'title': 'Test'
+        };
+        forceXIfStamp(element);
+        assert.notOk(element.getAttribute('hidden'));
+        assert.notEqual(getComputedStyle(element).display, 'none');
       });
     });
     </script>
