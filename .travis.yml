@@ -4,7 +4,7 @@ dist: trusty
 node_js: stable
 before_script:
 - npm install --silent bower polymer-cli
-- ./node_modules/.bin/bower install --silent
+- "./node_modules/.bin/bower install --silent"
 addons:
   sauce_connect: true
 script:
@@ -21,3 +21,7 @@ branches:
   - develop
 after_success:
 - node tasks/ci.js
+env:
+  global:
+  - secure: AZu57wXH4O72bXtAwXBqwTD5VOx2K+ZBGm673AySdDza8zRwR4GQYMaI6LdFRDuZCNOTvk9F+d1vGR86wY5PrlxHDq7/FOxvr/UUnzQ1RPTTlZuHmbScGf9g/NktnqESpquEB78KHP3ekY0hHVJHQNfUwQ1E50ECTsBW0A4OSc4T4te0RjHA99N421MeHog8RiG7x4exdm1T00+1fzye7FzryrAbWCas69n9VOxUos2N5YsoOJ7ykzM0BImYeJiaBebGyvunGcLWPnwUJMsz5pGgz1gUXhBpUcCGRbIxrUd8NhNjplg8MakTeA16LJUS9p5a5oUPIE1vfeyUV1DXsDNib1AbjPRZYWozaK5MOqGgP43lMQBiblqbJlO2YX0TSVTtYvA3IODp7qbrrcwBylXMTRl4JzF8rkD/yZts0lDzh/o6uR7y7aCAc7EYVWQTT7d6eU8HeESe+ASnGQOgscq93MeoJn7deHZCxR7BPaQRLIp6tByIjPYGUR3ue+FTsbK0cM6373oKntD4SuWzpFYTXEA2srCpAGPGbAaVrXlJY8bFiGkPRMyTvwzVXvMTZFNwXFTXQIi59hj7mD+kdyd1K2bCfTdBA6DY9+NKM7U1i2K/Nxnmg2rYWVKvKY9Rk+FF/io6gJMuD5L6c7YJ9H7i9GqmMjX437RuCa0CktE=
+  - secure: emffNbwyfTG3tiV0Y9bmctDuNzeOjnXrQIx0L8VaiXFt1onjNyzWcU3WcBQ23512hp6fOGLC5EdWdvlHhy2pl+qvsFvcZyHOYGiYkxteAevM0Y8E2rvCe3aBhr+4+L+exy3qh5U5lDZ36BGocbJfrz7/54zS5KwnXu/31kVJ2ZFvAhFo4OuxJp70GHU/JNJQQhNW0QDMAzpRi6Rjd6PFrEjcKztMgNOwicIr/UU5DTuaZ6VXi4M6pV/LOQ4ynq0ssF0rT0BC7ZYP7vXorviysvAFqUCDYT5/8PMJOtSwwrOYyqUL+DV+3gm++bOl7STQgy6yjvEMSoqHleksZKKeLzUlEpLnEX7szBHbbV5rN1IYHwJ//ZH6hltunh0Sb5Dq86jFvo8JbUeU/om4T9JcK8UQHQezArn/AgHNdWZWTM6R/zV3V2D1B3qGwWQ0x2WfqAOTDprgMDluoRnhjZM4MbpKSd0NB/sAiDhPbG/mkCHD+gO20LhBKEqG0RRUQ+oVNTmuSBe4AiAZdfA//X4gnN57BtM05pG4CJkg6Ncg7Oe4G+x4tX3J1+E8TjoWptoLt61Y7F/D+sZbJIRlbR5TGN6sE+UOgTx/nciZSeYIt0YYtLHSgi9LOsniQEghiw/eSkYZB0MBGFJLQu6RtaPdVGCka3T9D758jyfytJWd62w=
