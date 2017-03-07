@@ -29,30 +29,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </test-fixture>
 
     <script>
-    /* global suite, test, fixture, assert, forceXIfStamp */
+    /* global suite, fixture */
     suite('basic', function() {
       var element;
       setup(function() {
         element = fixture('basic');
-      });
-      test('Element is hidden by default', function() {
-        forceXIfStamp(element);
-        assert.ok(element.getAttribute('hidden'));
-        assert.equal(getComputedStyle(element).display, 'none');
-      });
-
-      test('Toggable is closed', function() {
-        forceXIfStamp(element);
-        assert.equal(element.opened, false);
-      });
-
-      test('Element is visible when data', function() {
-        element.raml = {
-          'title': 'Test'
-        };
-        forceXIfStamp(element);
-        assert.notOk(element.getAttribute('hidden'));
-        assert.notEqual(getComputedStyle(element).display, 'none');
       });
     });
     </script>

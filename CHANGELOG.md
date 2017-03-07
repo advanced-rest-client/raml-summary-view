@@ -1,3 +1,13 @@
+<a name="1.1.4"></a>
+## [1.1.4](https://github.com/advanced-rest-client/raml-summary-view/compare/1.0.3...v1.1.4) (2017-03-07)
+
+
+### Update
+
+* Updated element UI after user research. Now the panel is expected to work as a separate screen and not as a part of other elements. ([720a6b42510124dd9bffff1b9eb3d71b41aadcae](https://github.com/advanced-rest-client/raml-summary-view/commit/720a6b42510124dd9bffff1b9eb3d71b41aadcae))
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/advanced-rest-client/raml-summary-view/compare/1.0.2...v1.0.3) (2016-12-13)
 
