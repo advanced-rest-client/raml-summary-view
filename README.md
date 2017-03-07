@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/advanced-rest-client/raml-summary-view.svg?branch=master)](https://travis-ci.org/advanced-rest-client/raml-summary-view)  
+[![Build Status](https://travis-ci.org/advanced-rest-client/raml-summary-view.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/raml-summary-view)  
 
 # raml-summary-view
 
