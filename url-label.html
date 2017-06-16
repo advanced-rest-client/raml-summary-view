@@ -1,0 +1,319 @@
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<!--
+A display for the base URL with variables highlighter.
+
+Variables after click will be transformed into input elements where the user can enter a value
+of the variable. Hosted app should intercept the `uri-parameter-changed` custom event and set
+other relevant parts of the application accordingly.
+
+To disable variables editor, set `no-editor` attribute on the element.
+
+-->
+<dom-module id="url-label">
+  <template>
+    <style>
+    :host {
+      /*display: inline-block;*/
+
+      @apply(--arc-font-body1);
+      font-size: inherit;
+    }
+
+    .content {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      height: 42px;
+    }
+
+    div[hidden] {
+      display: none !important;
+    }
+
+    .variable {
+      font-weight: 500;
+      font-style: italic;
+      cursor: pointer;
+    }
+
+    .variable:before {
+      content: "\007B";
+    }
+
+    .variable:after {
+      content: "\007D";
+    }
+
+    :host([no-editor]) .variable {
+      cursor: text;
+      height: auto;
+    }
+
+    .part {
+      font-weight: 400;
+    }
+
+    paper-input {
+      display: inline-block;
+    }
+    </style>
+    <div class="content" on-opened-changed="_test">
+      <template is="dom-repeat" items="[[parts]]" id="partsRepeater">
+        <template is="dom-if" if="[[!item.hideLabel]]">
+          <div class$="[[_computeClass(item.variable)]]" title$="[[_computeTitle(item.variable)]]" on-tap="_partTap">[[item.value]]</div>
+        </template>
+        <template is="dom-if" if="[[item.selectEnabled]]">
+          <paper-dropdown-menu label="[[item.meta.name]] value" name="[[item.meta.name]]" no-label-float data-variable$="[[item.meta.key]]" on-opened-changed="_selectOpenedChanged">
+            <paper-listbox class="dropdown-content" data-key$="[[item.meta.key]]" attr-for-selected="data-value" selected="{{item.value}}">
+              <template is="dom-repeat" items="[[item.meta.enum]]">
+                <paper-item data-value$="[[item]]">[[item]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </template>
+        <template is="dom-if" if="[[item.inputEnabled]]">
+          <paper-input value="{{item.value}}" type="[[_computeInputType(item.meta.type)]]" pattern="[[item.meta.pattern]]" name="[[item.meta.name]]" data-key$="[[item.meta.key]]" auto-validate no-label-float label="[[item.meta.name]] value" on-blur="_inputBlur" on-change="_inputChange"></paper-input>
+        </template>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'url-label',
+
+      behaviors: [Polymer.Templatizer],
+
+      /**
+       * Fired when URI parameter value changed.
+       *
+       * @event uri-parameter-changed
+       * @param {String} name Name of the parameter
+       * @param {String} value Value of the parameter
+       */
+      properties: {
+        // The base URL.
+        url: {
+          type: String,
+          observer: '_urlChanged'
+        },
+        // Computed value, parsed parts of the URL
+        parts: {
+          type: Array,
+          readOnly: true
+        },
+        // RAML query parameters definition array.
+        uriParameters: Array,
+        /**
+         * If set the element will not open variable editors after click.
+         */
+        noEditor: {
+          type: Boolean,
+          reflectToAttibute: true
+        }
+      },
+
+      listeners: {
+        'iron-select': '_selectionChanged'
+      },
+
+      observers: [
+        '_computePartsMeta(parts, uriParameters)'
+      ],
+      // Adds meta property to the `parts` items.
+      _computePartsMeta: function(parts, params) {
+        if (!parts || !parts.length || !params || !params.length) {
+          return;
+        }
+        for (var i = 0, len = parts.length; i < len; i++) {
+          if (!parts[i].variable) {
+            continue;
+          }
+          var index = this._getVariableIndex(parts[i].key, params);
+          if (index === -1) {
+            continue;
+          }
+          this.set(['parts', i, 'meta'], params[index]);
+        }
+      },
+
+      // Handler for the URL change
+      _urlChanged: function(url) {
+        if (!url) {
+          return this._setParts(undefined);
+        }
+        var parts = [];
+        var index;
+        while ((index = url.indexOf('{')) !== -1) {
+          var end = url.indexOf('}');
+          var before = url.substr(0, index);
+          var part = url.substr(index + 1, end - index - 1);
+          url = url.substr(end + 1);
+          if (before) {
+            parts.push({
+              value: before,
+              variable: false
+            });
+          }
+          if (part) {
+            parts.push({
+              value: part,
+              variable: true,
+              key: part
+            });
+          }
+        }
+        if (url) {
+          parts.push({
+            value: url,
+            variable: false
+          });
+        }
+        this._setParts(parts);
+      },
+      /**
+       * Computes class of the URL segment.
+       */
+      _computeClass: function(isVariable) {
+        return isVariable ? 'variable' : 'part';
+      },
+      /**
+       * Computes title attribute of the URL segment.
+       */
+      _computeTitle: function(isVariable) {
+        if (!isVariable) {
+          return;
+        }
+        var label = 'This is an URI parameter. See table below for description.';
+        if (!this.noEditor) {
+          label += ' Click to set.';
+        }
+        return label;
+      },
+
+      // Handler to user click / tap
+      _partTap: function(e) {
+        if (this.noEditor) {
+          return;
+        }
+        var item = e.model.get('item');
+        if (!item.variable) {
+          return;
+        }
+        if (this._isEnum(item.meta)) {
+          e.model.set('item.selectEnabled', true);
+        } else {
+          e.model.set('item.inputEnabled', true);
+        }
+        e.model.set('item.hideLabel', true);
+      },
+      // Checks if the URI parameter definition is an enum value.
+      _isEnum: function(item) {
+        return !!(item && item.type === 'string' && item.enum && item.enum instanceof Array &&
+          item.enum.length);
+      },
+
+      // Get RAML URI parameter definition's index in the `uriParameters` array
+      _getVariableIndex: function(variable, variables) {
+        var result = -1;
+        variables = variables || this.uriParameters;
+        if (!variables || !variables.length) {
+          return result;
+        }
+        for (var i = 0, len = variables.length; i < len; i++) {
+          if (variables[i].key === variable) {
+            result = i;
+            break;
+          }
+        }
+        return result;
+      },
+      // Computes input form control type for given raml type.
+      _computeInputType: function(type) {
+        if (['number', 'integer'].indexOf(type) !== -1) {
+          return number;
+        }
+        return 'text';
+      },
+      // Called when input's value change.
+      _inputChange: function(e) {
+        var item = e.model.get('item');
+        var key = item.key;
+        var value = item.value;
+        this._notifyParamChange(key, value);
+      },
+      // Called when select option change.
+      _selectionChanged: function(e) {
+        if (this.__stopSelectionHandler) {
+          return;
+        }
+        var target = this.__getElementTarget(e, 'paper-listbox');
+        if (!target) {
+          return;
+        }
+        var key = target.dataset.key;
+        var value = target.selected;
+        this._notifyParamChange(key, value);
+      },
+
+      /**
+       * Sends a custom event when uri parameter change.
+       *
+       * @param {String} key The key property of RAML definition
+       * @param {String} value The value of the parameter.
+       */
+      _notifyParamChange: function(key, value) {
+        this.fire('uri-parameter-changed', {
+          name: key,
+          value: value
+        });
+      },
+      /**
+       * Returns a HTMLElment for given `nodeName` in event's path.
+       *
+       * @param {Event} e Event fired by the control.
+       * @param {String} nodeName A node name to look for
+       * @return {HTMLElment} An element or undefined if not exists in the path.
+       */
+      __getElementTarget: function(e, nodeName) {
+        nodeName = nodeName.toUpperCase();
+        if (!e.path || !e.path.length) {
+          return;
+        }
+        for (var i = 0, len = e.path.length; i < len; i++) {
+          if (e.path[i] && e.path[i].nodeName && e.path[i].nodeName === nodeName) {
+            return e.path[i];
+          }
+        }
+      },
+      // Called on input's blur to hide the control.
+      _inputBlur: function(e) {
+        e.model.set('item.inputEnabled', false);
+        e.model.set('item.hideLabel', false);
+      },
+      // Called on select close event to hide the control.
+      _selectOpenedChanged: function(e) {
+        if (!e.detail.value) {
+          e.model.set('item.selectEnabled', false);
+          e.model.set('item.hideLabel', false);
+        }
+      }
+    });
+  </script>
+</dom-module>
