@@ -267,7 +267,7 @@ Custom property | Description | Default
     },
     // Displays array values.
     _displayArray: function(arr) {
-      if (!arr) {
+      if (!arr || !arr.length) {
         return '';
       }
       if (!(arr instanceof Array)) {
