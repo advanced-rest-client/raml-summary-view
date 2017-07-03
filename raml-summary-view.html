@@ -212,16 +212,16 @@ Custom property | Description | Default
       </div>
       <iron-collapse opened="[[methodsOpened]]">
         <div class="sub-resources-list">
-          <table class="params-table" id="substable">
-            <tbody class="tbody">
+          <div class="params-table" id="substable">
+            <div class="tbody">
               <template is="dom-repeat" items="[[resources]]">
-                <tr class="tr">
-                  <td class="param-name td"><a href="#" data-path$="[[item.path]]">[[item.meta.name]]</a></td>
-                  <td class="param-desc td">[[item.meta.description]]</td>
-                </tr>
+                <section class="tr">
+                  <div class="param-name td"><a href="#" data-path$="[[item.path]]">[[item.meta.name]]</a></div>
+                  <div class="param-desc td">[[item.meta.description]]</div>
+                </section>
               </template>
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
       </iron-collapse>
     </section>
