@@ -1,3 +1,9 @@
+<a name="1.1.5"></a>
+## [1.1.5](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.4...v1.1.5) (2017-07-03)
+
+
+
+
 <a name="1.1.4"></a>
 ## [1.1.4](https://github.com/advanced-rest-client/raml-summary-view/compare/1.0.3...v1.1.4) (2017-03-07)
 
