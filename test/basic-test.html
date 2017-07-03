@@ -90,25 +90,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('resources model has valid path', function() {
         assert.equal(element.resources[0].path, 'docs.resources.0');
       });
-
-      test('Fires raml-path-changed event', function() {
-        var link = Polymer.dom(element.root).querySelector('.sub-resources-list a');
-        var spy = sinon.spy();
-        element.addEventListener('raml-path-changed', spy);
-        MockInteractions.tap(link);
-        assert.isTrue(spy.calledOnce);
-      });
-
-      test('raml-path-changed has path detail', function(done) {
-        var link = Polymer.dom(element.root).querySelector('.sub-resources-list a');
-        var clb = function(e) {
-          element.removeEventListener('raml-path-changed', clb);
-          assert.equal(e.detail.path, 'docs.resources.0');
-          done();
-        };
-        element.addEventListener('raml-path-changed', clb);
-        MockInteractions.tap(link);
-      });
     });
 
     suite('_displayArray()', function() {
@@ -137,6 +118,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('Array value returns valid string', function() {
         assert.equal(element._displayArray(['test-1', 'test-2']), 'test-1, test-2');
       });
+    });
+
+    suite('_subResourceTap()', function() {
+      var element;
+      var raml;
+      var event = {
+        preventDefault: function() {},
+        stopPropagation: function() {}
+      };
+
+      suiteSetup(function(done) {
+        var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+        var parser = fixture('parser');
+        var enhancer = fixture('enhancer');
+        enhancer.addEventListener('raml-json-enhance-ready', function(e) {
+          raml = e.detail.json;
+          done();
+        });
+        parser.loadApi(baseUrl + 'test.raml')
+        .then(function(data) {
+          enhancer.json = data.json.specification;
+        })
+        .catch(function(e) {
+          done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
+        });
+      });
+
+      setup(function() {
+        element = fixture('basic');
+        element.raml = raml;
+        TestHelpers.forceXIfStamp(element);
+        event.target = Polymer.dom(element.root).querySelector('.sub-resources-list a');
+      });
+
+      test('Fires raml-path-changed event', function() {
+        var spy = sinon.spy();
+        element.addEventListener('raml-path-changed', spy);
+        element._subResourceTap(event);
+        assert.isTrue(spy.calledOnce);
+      });
+
+      test('raml-path-changed has path detail', function(done) {
+        var clb = function(e) {
+          element.removeEventListener('raml-path-changed', clb);
+          assert.equal(e.detail.path, 'docs.resources.0');
+          done();
+        };
+        element.addEventListener('raml-path-changed', clb);
+        element._subResourceTap(event);
+      });
+
     });
     </script>
 
