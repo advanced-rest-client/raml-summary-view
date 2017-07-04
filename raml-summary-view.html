@@ -236,11 +236,6 @@ Custom property | Description | Default
      * @property {String} path Path requested by the user.
      */
     properties: {
-      // Computed value, True if the resource has methods or sub-resources.
-      hasResources: {
-        type: Boolean,
-        computed: '_computeHasResources(raml)'
-      },
       /**
        * Curently selected path in the RAML JSON structure. Required to compute
        * sub-resources.
@@ -255,12 +250,19 @@ Custom property | Description | Default
       resources: {
         type: Array,
         readOnly: true
+      },
+      // Computed value, True if resources model has been computed.
+      hasResources: {
+        type: Boolean,
+        value: false,
+        computed: '_computeHasResources(resources)'
       }
     },
 
     observers: [
-      '_computeResources(raml, hasResources, currentPath)'
+      '_computeResources(raml, currentPath)'
     ],
+
     listeners: {
       'substable.tap': '_subResourceTap'
     },
@@ -275,12 +277,12 @@ Custom property | Description | Default
       return arr.join(', ');
     },
 
-    _computeHasResources: function(raml) {
-      return !!(raml && raml.resources);
+    _computeHasResources: function(model) {
+      return !!(model && model.length);
     },
 
-    _computeResources: function(raml, hasResources, currentPath) {
-      if (!hasResources || !currentPath) {
+    _computeResources: function(raml, currentPath) {
+      if (!raml || !raml.resources || !currentPath) {
         this._setResources(undefined);
         return;
       }
