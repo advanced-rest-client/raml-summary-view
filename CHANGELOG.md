@@ -1,3 +1,15 @@
+<a name="1.1.7"></a>
+## [1.1.7](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.6...v1.1.7) (2017-07-04)
+
+
+### Update
+
+* Fixed typo. ([c074a6626c7f48f9f24c4a0cd5ffcec5d9d15b84](https://github.com/advanced-rest-client/raml-summary-view/commit/c074a6626c7f48f9f24c4a0cd5ffcec5d9d15b84))
+* Updated a way how `hasResources` property is computed, ([b587c45125cc64bcdeecc26524e7462ee5dcaa45](https://github.com/advanced-rest-client/raml-summary-view/commit/b587c45125cc64bcdeecc26524e7462ee5dcaa45))
+* Updated style names and references. ([1987e3b7aa6215db60538311cddaa10cf9f6aba7](https://github.com/advanced-rest-client/raml-summary-view/commit/1987e3b7aa6215db60538311cddaa10cf9f6aba7))
+
+
+
 <a name="1.1.6"></a>
 ## [1.1.6](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.5...v1.1.6) (2017-07-04)
 
