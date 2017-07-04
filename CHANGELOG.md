@@ -1,3 +1,31 @@
+<a name="1.1.6"></a>
+## [1.1.6](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.5...v1.1.6) (2017-07-04)
+
+
+### Breaking
+
+* Changed element to display list of resources in the summary page. ([64e839d62c50e81c6122b645f71ba9d57c28b012](https://github.com/advanced-rest-client/raml-summary-view/commit/64e839d62c50e81c6122b645f71ba9d57c28b012))
+
+### Fix
+
+* Fixed repo URL for the parser and enhancer. ([076718c4f1e654c652f11b81f6ccc7954b763540](https://github.com/advanced-rest-client/raml-summary-view/commit/076718c4f1e654c652f11b81f6ccc7954b763540))
+* Replaced table with other elements so it will work in IE 11. ([5db74e1015f3904238f1e88fdb1d82cf3047c349](https://github.com/advanced-rest-client/raml-summary-view/commit/5db74e1015f3904238f1e88fdb1d82cf3047c349))
+
+### New
+
+* Added API Console styles to the demo page to preview cahanges. ([c30a87b73012177c1fa6682568a83b48595e6a03](https://github.com/advanced-rest-client/raml-summary-view/commit/c30a87b73012177c1fa6682568a83b48595e6a03))
+* Added tests to the element. ([42447bd8741999c2a65ab2341cc6de534a13b34a](https://github.com/advanced-rest-client/raml-summary-view/commit/42447bd8741999c2a65ab2341cc6de534a13b34a))
+
+### Update
+
+* Added support for the new API in the demo page. ([ea883241e22e594dded6644936361fc015a30909](https://github.com/advanced-rest-client/raml-summary-view/commit/ea883241e22e594dded6644936361fc015a30909))
+* Removed all element to edit variables. ([3baf1eb7ce2649343219f34d2cb490149781e5cd](https://github.com/advanced-rest-client/raml-summary-view/commit/3baf1eb7ce2649343219f34d2cb490149781e5cd))
+* Updated CI stript to not build the element for PRs. ([e572c216b7d9f151f7ce8701316626fe1b2e132e](https://github.com/advanced-rest-client/raml-summary-view/commit/e572c216b7d9f151f7ce8701316626fe1b2e132e))
+* Updated polymer version and API commands ([12957b30ec5d67e140c318439bf3500f605f54bb](https://github.com/advanced-rest-client/raml-summary-view/commit/12957b30ec5d67e140c318439bf3500f605f54bb))
+* Updated test for firing events ([7df4e6d1932f1343fde4552126dc6961f4b18730](https://github.com/advanced-rest-client/raml-summary-view/commit/7df4e6d1932f1343fde4552126dc6961f4b18730))
+
+
+
 <a name="1.1.5"></a>
 ## [1.1.5](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.4...v1.1.5) (2017-07-03)
 
