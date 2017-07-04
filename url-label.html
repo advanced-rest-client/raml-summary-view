@@ -64,7 +64,7 @@ To disable variables editor, set `no-editor` attribute on the element.
       <template is="dom-repeat" items="[[parts]]">
         <div class$="[[_computeClass(item.variable)]]" id$="uri-part[[index]]">[[item.value]]</div>
         <template is="dom-if" if="[[item.variable]]">
-          <paper-tooltip for="uri-part[[index]]">This is a URI varible.</paper-tooltip>
+          <paper-tooltip for="uri-part[[index]]">This is a URI variable.</paper-tooltip>
         </template>
       </template>
     </div>
