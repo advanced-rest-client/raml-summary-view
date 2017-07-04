@@ -18,7 +18,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../arc-demo-helpers/raml-demo-page.html">
   <link rel="import" href="../../font-roboto/roboto.html">
+  <link rel="import" href="../../paper-toast/paper-toast.html">
   <link rel="import" href="../raml-summary-view.html">
+  <link rel="import" href="api-console-styles.html">
   <style>
   html,
   body {
@@ -39,10 +41,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <raml-demo-page raml="{{raml}}" no-selector>
       <h1>The raml-headers-form element</h1>
       <div main>
-        <raml-summary-view raml="[[raml]]" auto-hide></raml-summary-view>
+        <raml-summary-view raml="[[raml]]" current-path="docs"></raml-summary-view>
       </div>
     </raml-demo-page>
   </template>
+  <paper-toast></paper-toast>
+  <script>
+  window.addEventListener('raml-path-changed', function(e) {
+    var toast = document.querySelector('paper-toast');
+    toast.text = 'Selected path: ' + e.detail.path;
+    toast.opened = true;
+  });
+  </script>
 </body>
 
 </html>
