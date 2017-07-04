@@ -17,24 +17,158 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/test-helpers.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <link rel="import" href="../../raml-js-parser/raml-js-parser.html">
+    <link rel="import" href="../../raml-json-enhance/raml-json-enhance.html">
 
     <link rel="import" href="../raml-summary-view.html">
   </head>
   <body>
 
+    <test-fixture id="parser">
+      <template>
+        <raml-js-parser json></raml-js-parser>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="enhancer">
+      <template>
+        <raml-json-enhance></raml-json-enhance>
+      </template>
+    </test-fixture>
+
     <test-fixture id="basic">
       <template>
-        <raml-summary-view auto-hide></raml-summary-view>
+        <raml-summary-view current-path="docs"></raml-summary-view>
       </template>
     </test-fixture>
 
     <script>
-    /* global suite, fixture */
+    /* global fixture, assert, TestHelpers, MockInteractions, sinon */
     suite('basic', function() {
       var element;
+      var raml;
+
+      suiteSetup(function(done) {
+        var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+        var parser = fixture('parser');
+        var enhancer = fixture('enhancer');
+        enhancer.addEventListener('raml-json-enhance-ready', function(e) {
+          raml = e.detail.json;
+          done();
+        });
+        parser.loadApi(baseUrl + 'test.raml')
+        .then(function(data) {
+          enhancer.json = data.json.specification;
+        })
+        .catch(function(e) {
+          done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
+        });
+      });
+
+      setup(function() {
+        element = fixture('basic');
+        element.raml = raml;
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      test('hasResources should be true', function() {
+        assert.isTrue(element.hasResources);
+      });
+
+      test('methodsOpened should be true', function() {
+        assert.isTrue(element.methodsOpened);
+      });
+
+      test('resources is an array', function() {
+        assert.typeOf(element.resources, 'array');
+      });
+
+      test('resources has 2 elements', function() {
+        assert.lengthOf(element.resources, 2);
+      });
+
+      test('resources model has valid path', function() {
+        assert.equal(element.resources[0].path, 'docs.resources.0');
+      });
+    });
+
+    suite('_displayArray()', function() {
+      var element;
+
       setup(function() {
         element = fixture('basic');
       });
+
+      test('Not set argument should return empty string', function() {
+        assert.equal(element._displayArray(), '');
+      });
+
+      test('Empty argument should return empty string', function() {
+        assert.equal(element._displayArray([]), '');
+      });
+
+      test('Not array argument should return the same type', function() {
+        assert.typeOf(element._displayArray('test'), 'string');
+      });
+
+      test('Not array argument should return the same value', function() {
+        assert.equal(element._displayArray('test'), 'test');
+      });
+
+      test('Array value returns valid string', function() {
+        assert.equal(element._displayArray(['test-1', 'test-2']), 'test-1, test-2');
+      });
+    });
+
+    suite('_subResourceTap()', function() {
+      var element;
+      var raml;
+      var event = {
+        preventDefault: function() {},
+        stopPropagation: function() {}
+      };
+
+      suiteSetup(function(done) {
+        var baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+        var parser = fixture('parser');
+        var enhancer = fixture('enhancer');
+        enhancer.addEventListener('raml-json-enhance-ready', function(e) {
+          raml = e.detail.json;
+          done();
+        });
+        parser.loadApi(baseUrl + 'test.raml')
+        .then(function(data) {
+          enhancer.json = data.json.specification;
+        })
+        .catch(function(e) {
+          done(new Error('Parser error: ' + (e.message || 'Some error happended...')));
+        });
+      });
+
+      setup(function() {
+        element = fixture('basic');
+        element.raml = raml;
+        TestHelpers.forceXIfStamp(element);
+        event.target = Polymer.dom(element.root).querySelector('.sub-resources-list a');
+      });
+
+      test('Fires raml-path-changed event', function() {
+        var spy = sinon.spy();
+        element.addEventListener('raml-path-changed', spy);
+        element._subResourceTap(event);
+        assert.isTrue(spy.calledOnce);
+      });
+
+      test('raml-path-changed has path detail', function(done) {
+        var clb = function(e) {
+          element.removeEventListener('raml-path-changed', clb);
+          assert.equal(e.detail.path, 'docs.resources.0');
+          done();
+        };
+        element.addEventListener('raml-path-changed', clb);
+        element._subResourceTap(event);
+      });
+
     });
     </script>
 
