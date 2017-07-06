@@ -236,11 +236,6 @@ Custom property | Description | Default
      * @property {String} path Path requested by the user.
      */
     properties: {
-      /**
-       * Curently selected path in the RAML JSON structure. Required to compute
-       * sub-resources.
-       */
-      currentPath: String,
       // If true then the methods and sub-resources section is visible.
       methodsOpened: {
         type: Boolean,
@@ -260,7 +255,7 @@ Custom property | Description | Default
     },
 
     observers: [
-      '_computeResources(raml, currentPath)'
+      '_computeResources(raml)'
     ],
 
     listeners: {
@@ -281,15 +276,15 @@ Custom property | Description | Default
       return !!(model && model.length);
     },
 
-    _computeResources: function(raml, currentPath) {
-      if (!raml || !raml.resources || !currentPath) {
+    _computeResources: function(raml) {
+      if (!raml || !raml.resources) {
         this._setResources(undefined);
         return;
       }
       var resources = [];
       raml.resources.forEach(function(resource, i) {
         resources[resources.length] = {
-          path: currentPath + '.resources.' + i,
+          path: 'resources.' + i,
           meta: {
             name: resource.displayName || resource.relativeUri,
             description: resource.description
