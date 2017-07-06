@@ -1,3 +1,14 @@
+<a name="1.1.8"></a>
+## [1.1.8](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.7...v1.1.8) (2017-07-06)
+
+
+### Update
+
+* Removed `currentPath` property and use since it doesn't take part in settning resources paths. ([050ec1eddd49915478a7475950ed483d3e3cbc21](https://github.com/advanced-rest-client/raml-summary-view/commit/050ec1eddd49915478a7475950ed483d3e3cbc21))
+* Updated test after changing element's API. ([0f3788d4c3ed49279326a5e4af42d736ff48e337](https://github.com/advanced-rest-client/raml-summary-view/commit/0f3788d4c3ed49279326a5e4af42d736ff48e337))
+
+
+
 <a name="1.1.7"></a>
 ## [1.1.7](https://github.com/advanced-rest-client/raml-summary-view/compare/1.1.6...v1.1.7) (2017-07-04)
 

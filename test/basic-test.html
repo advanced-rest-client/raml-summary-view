@@ -38,12 +38,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <test-fixture id="basic">
       <template>
-        <raml-summary-view current-path="docs"></raml-summary-view>
+        <raml-summary-view></raml-summary-view>
       </template>
     </test-fixture>
 
     <script>
-    /* global fixture, assert, TestHelpers, MockInteractions, sinon */
+    /* global fixture, assert, TestHelpers, sinon */
     suite('basic', function() {
       var element;
       var raml;
@@ -88,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('resources model has valid path', function() {
-        assert.equal(element.resources[0].path, 'docs.resources.0');
+        assert.equal(element.resources[0].path, 'resources.0');
       });
     });
 
@@ -162,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('raml-path-changed has path detail', function(done) {
         var clb = function(e) {
           element.removeEventListener('raml-path-changed', clb);
-          assert.equal(e.detail.path, 'docs.resources.0');
+          assert.equal(e.detail.path, 'resources.0');
           done();
         };
         element.addEventListener('raml-path-changed', clb);
